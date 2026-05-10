@@ -1,81 +1,181 @@
-// Select the class bubble
-time = document.getElementsByClassName('bubbles')[0];
+const state = {
+    water: 45,
+    sun: 45,
+    air: 45,
+    growth: 0,
+    unlockedColors: ["#f37aa2"],
+    lastRewardAt: 0,
+};
 
-// padding values for desktop
-var fish2move = 100;
-var fish3move = 900;
-var fish4move = 1200;
+const colorRewards = [
+    { at: 0, name: "粉紅", value: "#f37aa2" },
+    { at: 24, name: "金黃", value: "#ffd166" },
+    { at: 48, name: "紫色", value: "#a78bfa" },
+    { at: 72, name: "珊瑚", value: "#fb7185" },
+    { at: 96, name: "白雪", value: "#fff7ed" },
+];
 
-if (screen.width < 400) {
+const stages = [
+    { min: 0, className: "seedling", label: "幼苗正在伸懶腰", count: 3 },
+    { min: 25, className: "sprout", label: "葉子變得更有精神了", count: 5 },
+    { min: 50, className: "bud", label: "花苞悄悄冒出來了", count: 7 },
+    { min: 75, className: "blooming", label: "鬱金香盛開中", count: 9 },
+    { min: 100, className: "blooming", label: "送給媽媽的鬱金香花海完成！", count: 13 },
+];
 
-    //Change transformation duration and translatey for mobile view
-    time.style.setProperty('--transform-duration', '15s')
-    time.style.setProperty('--transform-y', '-700vh')
+const elements = {
+    garden: document.querySelector("#garden"),
+    stageLabel: document.querySelector("#stageLabel"),
+    hintText: document.querySelector("#hintText"),
+    rewardList: document.querySelector("#rewardList"),
+    progressText: document.querySelector("#progressText"),
+    growthMeter: document.querySelector("#growthMeter"),
+    resetGame: document.querySelector("#resetGame"),
+    values: {
+        water: document.querySelector("#waterValue"),
+        sun: document.querySelector("#sunValue"),
+        air: document.querySelector("#airValue"),
+    },
+    meters: {
+        water: document.querySelector("#waterMeter"),
+        sun: document.querySelector("#sunMeter"),
+        air: document.querySelector("#airMeter"),
+    },
+};
 
-    // padding values for mobile
-    fish2move = 1680;
-    fish3move = 3000;
-    fish4move = 4300;
+function clamp(value, min = 0, max = 100) {
+    return Math.min(max, Math.max(min, value));
 }
 
+function getStage() {
+    return stages.reduce((current, stage) => (state.growth >= stage.min ? stage : current), stages[0]);
+}
 
+function isBalanced() {
+    return [state.water, state.sun, state.air].every((value) => value >= 35 && value <= 85);
+}
 
-window.addEventListener('scroll', function () {
+function chooseFlowerColor(index) {
+    return state.unlockedColors[index % state.unlockedColors.length];
+}
 
-    let value = window.scrollY;   //Get Scroll Value (Mobile - High)
+function renderGarden() {
+    const stage = getStage();
+    elements.stageLabel.textContent = stage.label;
+    elements.garden.innerHTML = "";
 
-    text.style.top = 50 + value * -0.2 + '%';
-    cloud.style.left = value * 2 + 'px';
-
-    bird1.style.top = value * 0.1 + 'px';
-    bird1.style.left = value * 1 + 'px';
-
-    bird2.style.top = value * -0.1 + 'px';
-    bird2.style.left = value * -2 + 'px';
-
-    explore.style.marginTop = value * 1.5 + 'px';
-
-    rocks.style.top = value * -0.14 + 'px';
-
-    forest.style.top = value * 0.4 + 'px';
-    sky.style.top = value * 0.25 + 'px';
-    mountains.style.top = value * 0.25 + 'px';
-
-    header.style.top = value * 0.7 + 'px';
-    sun.style.top = value * 1 + 'px';
-
-    //To prevent splash to move above sea water
-    if (value < 380) {
-        splash.style.top = 20 + value * -0.3 + 'px';
-    }
-
-    //Move fishes horizontally
-    fish1.style.right = (value - 100) * 1 + 'px';
-    fish2.style.left = (value - fish2move) * 1 + 'px';
-    fish3.style.right = (value - fish3move) * 1 + 'px';
-    fish4.style.left = (value - fish4move) * 1 + 'px';
-})
-
-
-// Contains the link for all social media handles
-var links = document.getElementsByClassName("social-media");
-
-links[0].addEventListener("click", () => { openlink(1) });
-links[1].addEventListener("click", () => { openlink(2) });
-links[2].addEventListener("click", () => { openlink(3) });
-links[3].addEventListener("click", () => { openlink(4) });
-
-function openlink(x) {
-    if (x == 1) {
-        window.open("https://www.instagram.com/_.vini._02_/", "_blank");
-    }
-    if (x == 2) {
-        window.open("https://www.linkedin.com/in/vineet-kumar-gupta-2833ab196/", "_blank");
-    }
-    if (x == 3) {
-        window.open("https://github.com/VineetKumar02", "_blank");
-    }
-    if (x == 4) {
-        window.open("https://vineet-portfolio-site.netlify.app/", "_blank");
+    for (let index = 0; index < stage.count; index += 1) {
+        const plant = document.createElement("div");
+        plant.className = `plant ${stage.className}`;
+        plant.style.setProperty("--flower", chooseFlowerColor(index));
+        plant.style.transform = `scale(${0.82 + (index % 4) * 0.08}) rotate(${(index - stage.count / 2) * 1.6}deg)`;
+        plant.innerHTML = `
+            <span class="stem"></span>
+            <span class="leaf left"></span>
+            <span class="leaf right"></span>
+            <span class="bloom"></span>
+        `;
+        elements.garden.appendChild(plant);
     }
 }
+
+function renderRewards() {
+    elements.rewardList.innerHTML = "";
+    colorRewards.forEach((reward) => {
+        const chip = document.createElement("span");
+        const unlocked = state.unlockedColors.includes(reward.value);
+        chip.className = "reward-chip";
+        chip.style.opacity = unlocked ? "1" : "0.42";
+        chip.innerHTML = `<span class="reward-dot" style="--chip-color: ${reward.value}"></span>${unlocked ? reward.name : `${reward.at}% 解鎖`}`;
+        elements.rewardList.appendChild(chip);
+    });
+}
+
+function renderStatus() {
+    ["water", "sun", "air"].forEach((key) => {
+        const value = Math.round(state[key]);
+        elements.values[key].textContent = `${value}%`;
+        elements.meters[key].style.width = `${value}%`;
+    });
+
+    const growth = Math.round(state.growth);
+    elements.growthMeter.style.width = `${growth}%`;
+    elements.progressText.textContent = `${growth} / 100`;
+
+    if (state.growth >= 100) {
+        elements.hintText.textContent = "完成！這片花海就是送給媽媽的母親節祝福。可以重新開始，再種出不同節奏的花園。";
+    } else if (isBalanced()) {
+        elements.hintText.textContent = "狀態剛剛好！花園正在快速長大，繼續保持這個照顧節奏。";
+    } else {
+        elements.hintText.textContent = "提示：三個狀態維持在 35%～85% 時，鬱金香會長得最快。太多或太少都要調整喔。";
+    }
+}
+
+function unlockRewards() {
+    colorRewards.forEach((reward) => {
+        if (state.growth >= reward.at && !state.unlockedColors.includes(reward.value)) {
+            state.unlockedColors.push(reward.value);
+            state.lastRewardAt = reward.at;
+            elements.garden.classList.remove("celebration");
+            window.requestAnimationFrame(() => elements.garden.classList.add("celebration"));
+        }
+    });
+}
+
+function render() {
+    unlockRewards();
+    renderStatus();
+    renderRewards();
+    renderGarden();
+}
+
+function careForTulips(action) {
+    const effects = {
+        water: { water: 25, sun: -5, air: -2 },
+        sun: { sun: 25, water: -7, air: -1 },
+        air: { air: 25, water: -3, sun: -3 },
+    };
+
+    Object.entries(effects[action]).forEach(([key, amount]) => {
+        state[key] = clamp(state[key] + amount);
+    });
+
+    const button = document.querySelector(`[data-action="${action}"]`);
+    button.disabled = true;
+    window.setTimeout(() => {
+        button.disabled = false;
+    }, 650);
+
+    render();
+}
+
+function growTick() {
+    state.water = clamp(state.water - 1.4);
+    state.sun = clamp(state.sun - 1.1);
+    state.air = clamp(state.air - 1.2);
+
+    if (state.growth < 100) {
+        state.growth = clamp(state.growth + (isBalanced() ? 2.7 : 0.55));
+    }
+
+    render();
+}
+
+function resetGame() {
+    state.water = 45;
+    state.sun = 45;
+    state.air = 45;
+    state.growth = 0;
+    state.unlockedColors = ["#f37aa2"];
+    state.lastRewardAt = 0;
+    render();
+}
+
+document.querySelectorAll(".care-button").forEach((button) => {
+    button.addEventListener("click", () => careForTulips(button.dataset.action));
+});
+
+elements.resetGame.addEventListener("click", resetGame);
+
+render();
+window.setInterval(growTick, 1600);
