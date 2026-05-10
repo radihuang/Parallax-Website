@@ -50,18 +50,39 @@
                 <button class="reset-button" type="button" id="resetGame">重新開始</button>
             </div>
 
-            <div class="status-board" aria-label="花園狀態">
+            <div class="status-board" aria-label="花園狀態與照顧按鈕">
                 <div class="stat-card">
-                    <div class="stat-title"><span>💧 水分</span><strong id="waterValue">45%</strong></div>
-                    <div class="meter"><span id="waterMeter"></span></div>
+                    <div class="stat-info">
+                        <div class="stat-title"><span>💧 水分</span><strong id="waterValue">45%</strong></div>
+                        <div class="meter"><span id="waterMeter"></span></div>
+                    </div>
+                    <button class="care-button water" type="button" data-action="water">
+                        <span>💧</span>
+                        澆水
+                        <small>+25</small>
+                    </button>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-title"><span>☀️ 陽光</span><strong id="sunValue">45%</strong></div>
-                    <div class="meter"><span id="sunMeter"></span></div>
+                    <div class="stat-info">
+                        <div class="stat-title"><span>☀️ 陽光</span><strong id="sunValue">45%</strong></div>
+                        <div class="meter"><span id="sunMeter"></span></div>
+                    </div>
+                    <button class="care-button sun" type="button" data-action="sun">
+                        <span>☀️</span>
+                        曬太陽
+                        <small>+25</small>
+                    </button>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-title"><span>🍃 通風</span><strong id="airValue">45%</strong></div>
-                    <div class="meter"><span id="airMeter"></span></div>
+                    <div class="stat-info">
+                        <div class="stat-title"><span>🍃 通風</span><strong id="airValue">45%</strong></div>
+                        <div class="meter"><span id="airMeter"></span></div>
+                    </div>
+                    <button class="care-button air" type="button" data-action="air">
+                        <span>🍃</span>
+                        通風
+                        <small>+25</small>
+                    </button>
                 </div>
             </div>
 
@@ -79,24 +100,6 @@
                 </div>
                 <div class="growth-track" aria-hidden="true"><span id="growthMeter"></span></div>
                 <p class="hint" id="hintText">提示：三個狀態維持在 35%～85% 時，鬱金香會長得最快。</p>
-            </div>
-
-            <div class="care-actions" aria-label="照顧按鈕">
-                <button class="care-button water" type="button" data-action="water">
-                    <span>💧</span>
-                    澆水
-                    <small>+25 水分</small>
-                </button>
-                <button class="care-button sun" type="button" data-action="sun">
-                    <span>☀️</span>
-                    曬太陽
-                    <small>+25 陽光</small>
-                </button>
-                <button class="care-button air" type="button" data-action="air">
-                    <span>🍃</span>
-                    通風
-                    <small>+25 通風</small>
-                </button>
             </div>
 
             <aside class="reward-panel" aria-labelledby="reward-title">
