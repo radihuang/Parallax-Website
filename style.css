@@ -198,6 +198,12 @@ h2 {
     font-weight: 800;
 }
 
+.garden-actions {
+    display: flex;
+    justify-content: center;
+    margin: 14px 0 18px;
+}
+
 .status-board {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -269,6 +275,63 @@ h2 {
     box-shadow: 0 0 70px 28px rgba(255, 224, 131, 0.52);
 }
 
+.sky-glow::before,
+.sky-glow::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    opacity: 0;
+    transform: translateX(-50%) translateY(6px);
+}
+
+.sky-glow::before {
+    top: 35px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #7c4a13;
+    box-shadow: 28px 0 0 #7c4a13;
+}
+
+.sky-glow::after {
+    top: 58px;
+    width: 42px;
+    height: 22px;
+    border-bottom: 5px solid #7c4a13;
+    border-radius: 0 0 42px 42px;
+}
+
+.sun-active .sky-glow::before,
+.sun-active .sky-glow::after {
+    animation: sun-smile 1.25s ease both;
+}
+
+.wind-effect {
+    position: absolute;
+    top: 132px;
+    left: -90px;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(42, 137, 107, 0.82);
+    font-size: 2.6rem;
+    opacity: 0;
+    pointer-events: none;
+    text-shadow: 0 8px 22px rgba(47, 159, 108, 0.22);
+}
+
+.wind-effect::after {
+    content: "〰 〰 〰";
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 2rem;
+    letter-spacing: 0.18em;
+}
+
+.air-active .wind-effect {
+    animation: breeze-pass 1.25s ease-out both;
+}
+
 .stage-label {
     position: absolute;
     top: 20px;
@@ -297,10 +360,38 @@ h2 {
     bottom: 0;
     left: 0;
     height: 86px;
+    overflow: hidden;
     background:
         radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.2) 0 7px, transparent 8px),
         radial-gradient(circle at 72% 45%, rgba(255, 255, 255, 0.18) 0 6px, transparent 7px),
         linear-gradient(135deg, #8c5b3d, #5d3a28);
+}
+
+.soil::before,
+.soil::after {
+    content: "";
+    position: absolute;
+    inset: 10px -20% 12px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.soil::before {
+    background:
+        linear-gradient(100deg, transparent 0 8%, rgba(89, 191, 255, 0.62) 11% 18%, transparent 23% 31%, rgba(89, 191, 255, 0.5) 36% 45%, transparent 52% 61%, rgba(89, 191, 255, 0.58) 68% 78%, transparent 86%),
+        radial-gradient(ellipse at 28% 56%, rgba(116, 211, 255, 0.62) 0 12%, transparent 44%),
+        radial-gradient(ellipse at 63% 48%, rgba(116, 211, 255, 0.46) 0 10%, transparent 40%);
+}
+
+.soil::after {
+    top: 42px;
+    background: repeating-linear-gradient(90deg, transparent 0 24px, rgba(132, 220, 255, 0.45) 28px 52px, transparent 56px 92px);
+}
+
+.water-active .soil::before,
+.water-active .soil::after {
+    animation: water-trace 1.15s ease-out both;
 }
 
 .plant {
@@ -363,7 +454,7 @@ h2 {
 .plant.blooming { --plant-height: 210px; --bloom-opacity: 1; --bloom-scale: 1; }
 
 .progress-card {
-    margin-top: 18px;
+    margin-top: 0;
 }
 
 .progress-copy {

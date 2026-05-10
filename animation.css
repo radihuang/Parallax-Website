@@ -65,3 +65,61 @@
         transition-duration: 0.01ms !important;
     }
 }
+
+@keyframes water-trace {
+    0% {
+        opacity: 0;
+        transform: translateX(-18%) scaleX(0.8);
+        filter: blur(2px);
+    }
+
+    35% {
+        opacity: 0.95;
+        transform: translateX(0) scaleX(1);
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(18%) scaleX(1.06);
+        filter: blur(3px);
+    }
+}
+
+@keyframes sun-smile {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(8px) scale(0.82);
+    }
+
+    45% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+}
+
+@keyframes breeze-pass {
+    0% {
+        opacity: 0;
+        transform: translateX(0) translateY(8px) scale(0.92);
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 1;
+        transform: translateX(62vw) translateY(-12px) scale(1.02);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(76vw) translateY(-18px) scale(1.04);
+    }
+}

@@ -47,7 +47,6 @@
                     <p class="eyebrow">Tulip Care Game</p>
                     <h2 id="game-title">照顧鬱金香任務</h2>
                 </div>
-                <button class="reset-button" type="button" id="resetGame">重新開始</button>
             </div>
 
             <div class="status-board" aria-label="花園狀態與照顧按鈕">
@@ -86,11 +85,16 @@
                 </div>
             </div>
 
-            <div class="garden-wrap">
+            <div class="garden-wrap" id="gardenWrap">
                 <div class="sky-glow" aria-hidden="true"></div>
+                <div class="wind-effect" aria-hidden="true">💨</div>
                 <p class="stage-label" id="stageLabel">幼苗正在伸懶腰</p>
                 <div class="garden" id="garden" aria-live="polite" aria-label="鬱金香花園"></div>
                 <div class="soil" aria-hidden="true"></div>
+            </div>
+
+            <div class="garden-actions">
+                <button class="reset-button" type="button" id="resetGame">重新開始</button>
             </div>
 
             <div class="progress-card">

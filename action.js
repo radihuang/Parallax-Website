@@ -25,6 +25,7 @@ const stages = [
 
 const elements = {
     garden: document.querySelector("#garden"),
+    gardenWrap: document.querySelector("#gardenWrap"),
     stageLabel: document.querySelector("#stageLabel"),
     hintText: document.querySelector("#hintText"),
     rewardList: document.querySelector("#rewardList"),
@@ -129,6 +130,13 @@ function render() {
     renderGarden();
 }
 
+function triggerCareEffect(action) {
+    const effectClass = `${action}-active`;
+    elements.gardenWrap.classList.remove(effectClass);
+    window.requestAnimationFrame(() => elements.gardenWrap.classList.add(effectClass));
+    window.setTimeout(() => elements.gardenWrap.classList.remove(effectClass), 1300);
+}
+
 function careForTulips(action) {
     const effects = {
         water: { water: 25, sun: -5, air: -2 },
@@ -147,6 +155,7 @@ function careForTulips(action) {
     }, 650);
 
     render();
+    triggerCareEffect(action);
 }
 
 function growTick() {
@@ -168,6 +177,7 @@ function resetGame() {
     state.growth = 0;
     state.unlockedColors = ["#f37aa2"];
     state.lastRewardAt = 0;
+    elements.gardenWrap.classList.remove("water-active", "sun-active", "air-active");
     render();
 }
 
